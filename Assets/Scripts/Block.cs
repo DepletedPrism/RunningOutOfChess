@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Block : MonoBehaviour {
   // status 0: block, 1: warning, 2: trap
-  public int status = 0;
+  public int status = 0, idx = 0;
 
   public int disappearStart = -1;
   public const int disappearRound = 1;
@@ -27,7 +27,7 @@ public class Block : MonoBehaviour {
   }
 
   void FixedUpdate() {
-    int roundCount = GameObject.Find("GameManager").GetComponent<GameManager>().roundCount;
+    int roundCount = GameManager.Instance.roundCount;
     // warning
     if (status == 1) {
       if (disappearStart < 0) {

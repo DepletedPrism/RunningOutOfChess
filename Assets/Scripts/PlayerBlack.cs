@@ -6,6 +6,10 @@ using UnityEngine;
 public class PlayerBlack : Player {
   public Vector3 destination = Vector3.zero;
 
+  private void Start() {
+    playerNumber = 1;
+  }
+
   override public bool Move() {
     const float moveSpeed = 1.0f;
 
@@ -34,8 +38,9 @@ public class PlayerBlack : Player {
   }
 
   public override bool Remove() {
-    if (Input.GetKeyDown(KeyCode.Space)) {
-      Vector3 start = transform.position, end = transform.position;
+    if (Input.GetKey(KeyCode.Space)) {
+      // Vector3 start = transform.position + Vector3.up, end = start;
+      Vector3 start = transform.position, end = start;
       if (Input.GetKeyDown(KeyCode.W)) {
         end += Vector3.forward;
       }
@@ -50,15 +55,15 @@ public class PlayerBlack : Player {
       }
 
       if (start != end) {
-        Destroy(gameObject);
         RaycastHit hitObject;
         if (Physics.Linecast(start, end, out hitObject)) {
-          // TODO
+          int idx = hitObject.collider.gameObject.GetComponent<Block>().idx;
+          if (idx == 0)
+            return false;
+          Destroy(hitObject.collider.gameObject);
+          GameManager.Instance.MarkDestory(idx);
+          return true;
         }
-      }
-
-      if (Input.GetKeyDown(KeyCode.Space)) {
-        return false;
       }
     }
 

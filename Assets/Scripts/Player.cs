@@ -2,38 +2,39 @@ using System.Collections;
 using System.Collections.Generic;
 
 using UnityEngine;
+using UnityEngine.UI;
 
 public abstract class Player : MonoBehaviour {
   public bool isGrounded = false;
   public bool isFreezed = false, freezed = false;
 
-  private void Start() {
-    // TODO
-  }
+  public int playerNumber;
+
+  public Text playerStatus;
 
   private void FixedUpdate() {
     Vector3 position = this.GetComponent<Transform>().position;
 
     // Player ÒÑµøÈëÐé¿Õ
     if (position.y < -3.0) {
+      GameManager.Instance.EndGame(playerNumber);
       Destroy(gameObject);
     }
   }
 
   public bool Operate() {
-    if (!isGrounded)
+    if (!isGrounded) {
+      // playerStatus.text = "Falling...";
       return false;
+    }
 
     if (isFreezed && freezed) {
       isFreezed = false;
       return true;
     }
 
-    if (Move()) {
+    if (Remove() || Move()) {
       freezed = false;
-      return true;
-    }
-    if (Remove()) {
       return true;
     }
 
